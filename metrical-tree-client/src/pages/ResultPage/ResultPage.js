@@ -317,7 +317,7 @@ const ResultPage = () => {
           <Grid container justifyContent="space-between">
             <Grid item>
               <Typography className={classes.subTitle}>
-                Metrical Tree
+                MetricalTree
               </Typography>
               <Typography className={classes.title}>
                 {mergedResult?.name ?? 'Compute Result'}

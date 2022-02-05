@@ -73,7 +73,7 @@ const Appbar = () => {
                       Stanford{' '}
                     </span>
                     <span className={classes.metricalTreeTitle}>
-                      | Metrical Tree
+                      | MetricalTree
                     </span>
                   </Typography>
                 </Link>

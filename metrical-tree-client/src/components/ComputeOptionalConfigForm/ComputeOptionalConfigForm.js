@@ -46,15 +46,14 @@ const ComputeOptionalConfigForm = ({ control, setValue }) => {
       <Grid container>
         <Grid item xs={12}>
           <Typography style={{ fontWeight: 'bold' }}>
-            Instructions
+            Fine-Tuning the Grammar
           </Typography>
-          <Typography gutterBottom variant="subtitle2">
-            Optional configuration allows you to change the value of
-            various parameters.
-          </Typography>
-          <Typography gutterBottom variant="subtitle2">
-            Select from default parameters or create you own by typing
-            in a new parameter and pressing 'Enter'.
+          <Typography>
+            Function words are a major puzzle. It is not clear whether
+            small words like "a", "all", "in", "is", "not", "that",
+            "the", "this", "will", "you", etc., are stressable or not.
+            Whatever you decide will have a huge impact on the
+            calculation of normal stress in virtually every sentence.
           </Typography>
         </Grid>
         <Grid item xs={12} className={classes.section}>

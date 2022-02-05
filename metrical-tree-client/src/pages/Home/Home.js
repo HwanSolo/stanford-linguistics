@@ -12,16 +12,17 @@ import background from 'assets/images/homepageBg.jpg';
 import StyledButtonPrimary from 'components/shared/ButtonPrimary/ButtonPrimary';
 
 const useStyles = makeStyles((theme) => ({
+  mainWrapper: { height: '100vh' },
   container: {
-    height: 'calc(100vh - 316px)',
+    height: 'calc(100vh - 320px)',
     backgroundImage: `url(${background})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     [theme.breakpoints.down('sm')]: {
-      height: 'calc(100vh - 402px)',
+      height: 'calc(100vh - 405px)',
     },
     [theme.breakpoints.down('xs')]: {
-      height: 'calc(100vh - 421px)',
+      height: 'auto',
     },
   },
   card: {
@@ -66,7 +67,7 @@ const Home = () => {
   const history = useHistory();
 
   return (
-    <>
+    <Grid container className={classes.mainWrapper}>
       <IdentityBar />
       <Appbar />
       <Grid
@@ -78,19 +79,19 @@ const Home = () => {
         <Grid item xs={10} sm={10} md={6} lg={4}>
           <Card className={classes.card}>
             <Typography className={classes.subtitle}>
-              Metrical Tree
+              MetricalTree
             </Typography>
             <Typography className={classes.title}>
-              Analyze Sentence Structure
+              English Sentence Stress
             </Typography>
             <Typography>
-              Metrical Tree generates a normal stress contour for
+              MetricalTree generates a normal stress contour for
               English sentences. You can type in your own text from
               the keyboard or upload a text file.
             </Typography>
             <Link
               className={classes.link}
-              onClick={() => history.push('/my-results')}>
+              onClick={() => history.push('/about')}>
               <Grid container>
                 <Grid item>
                   <Typography className={classes.linkLabel}>
@@ -113,7 +114,7 @@ const Home = () => {
       </Grid>
       <SecondaryFooter />
       <PrimaryFooter />
-    </>
+    </Grid>
   );
 };
 

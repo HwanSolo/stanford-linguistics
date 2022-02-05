@@ -9,11 +9,18 @@ import Appbar from '../../components/Appbar';
 import StyledButtonPrimary from 'components/shared/ButtonPrimary/ButtonPrimary';
 
 const useStyles = makeStyles((theme) => ({
+  mainWrapper: { height: '100vh' },
   container: {
     padding: 16,
     backgroundColor: '#f2f2f2',
-    height: 'calc(100vh - 316px)',
+    height: 'calc(100vh - 320px)',
     overflowY: 'auto',
+    [theme.breakpoints.down('sm')]: {
+      height: 'calc(100vh - 405px)',
+    },
+    [theme.breakpoints.down('xs')]: {
+      height: 'auto',
+    },
   },
   title: {
     fontWeight: 'bold',
@@ -42,7 +49,7 @@ const AboutPage = () => {
   const history = useHistory();
 
   return (
-    <>
+    <Grid container className={classes.mainWrapper}>
       <IdentityBar />
       <Appbar />
       <Grid
@@ -52,7 +59,7 @@ const AboutPage = () => {
         className={classes.container}>
         <Grid item xs={12} sm={10} md={8} lg={6}>
           <Typography className={classes.subTitle}>
-            Metrical Tree
+            MetricalTree
           </Typography>
           <Typography className={classes.title}>About</Typography>
           <Typography className={classes.sectionText}>
@@ -83,16 +90,6 @@ const AboutPage = () => {
               Download Tutorial Handout
             </Typography>
           </Link>
-          <Typography className={classes.sectionTitle}>
-            FINE-TUNING
-          </Typography>
-          <Typography className={classes.sectionText}>
-            Function words are a major puzzle. It is not clear whether
-            small words like "a", "all", "in", "is", "not", "that",
-            "the", "this", "will", "you", etc., are stressable or not.
-            Whatever you decide will have a huge impact on the
-            calculation of normal stress in virtually every sentence.
-          </Typography>
           <Typography className={classes.sectionText}>
             MetricalTree solves the problem as follows:
           </Typography>
@@ -153,7 +150,7 @@ const AboutPage = () => {
       </Grid>
       <SecondaryFooter />
       <PrimaryFooter />
-    </>
+    </Grid>
   );
 };
 

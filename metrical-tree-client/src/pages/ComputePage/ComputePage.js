@@ -28,16 +28,17 @@ import { useSettings } from 'recoil/settings';
 import noFilesImage from 'assets/images/noFiles.svg';
 
 const useStyles = makeStyles((theme) => ({
+  mainWrapper: { height: '100vh' },
   container: {
     padding: 16,
     backgroundColor: theme.palette.background.default,
-    height: 'calc(100vh - 316px)',
+    height: 'calc(100vh - 320px)',
     overflowY: 'auto',
     [theme.breakpoints.down('sm')]: {
-      height: 'calc(100vh - 402px)',
+      height: 'calc(100vh - 405px)',
     },
     [theme.breakpoints.down('xs')]: {
-      height: 'calc(100vh - 421px)',
+      height: 'auto',
     },
   },
   title: {
@@ -58,7 +59,12 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     fontSize: '1.5rem',
   },
-  noFilesSubTitle: { textAlign: 'center' },
+  noFilesSubTitle: {
+    textAlign: 'center',
+    [theme.breakpoints.down('xs')]: {
+      marginBottom: theme.spacing(4),
+    },
+  },
 }));
 
 const ComputePage = () => {
@@ -272,7 +278,7 @@ const ComputePage = () => {
   };
 
   return (
-    <>
+    <Grid container className={classes.mainWrapper}>
       <IdentityBar />
       <Appbar />
       <Grid
@@ -283,13 +289,13 @@ const ComputePage = () => {
           <Grid container>
             <Grid item>
               <Typography className={classes.subTitle}>
-                Metrical Tree
+                MetricalTree
               </Typography>
               <Typography className={classes.title}>
                 Compute
               </Typography>
               <Typography>
-                Click the button below to begin analysis of text.
+                Click the button below to analyze your text.
               </Typography>
               <StyledButtonPrimary
                 label={'Compute'}
@@ -351,7 +357,7 @@ const ComputePage = () => {
           setIsDeleteConfirmationDialogOpen(false);
         }}
       />
-    </>
+    </Grid>
   );
 };
 

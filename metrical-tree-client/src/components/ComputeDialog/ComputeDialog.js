@@ -21,14 +21,16 @@ import {
 } from '@material-ui/core';
 import ComputeOptionalConfigForm from 'components/ComputeOptionalConfigForm';
 import StyledButtonPrimary from 'components/shared/ButtonPrimary';
-import { SAMPLE_RAW_TEXT } from 'constants/settings';
+import {
+  SAMPLE_RAW_TEXT,
+  DEFAULT_SETTINGS_CONFIG,
+} from 'constants/settings';
 import {
   UPLOAD_METRICAL_TREE_FILE,
   COMPUTE_METRICAL_TREE_FILE,
 } from 'graphql/metricalTree';
 import { useMutation } from '@apollo/client';
 import { useComputeResults } from 'recoil/results';
-import { useSettings } from 'recoil/settings';
 
 const useStyles = makeStyles((theme) => ({
   dialogTitle: { padding: '8px 8px 0 16px' },
@@ -108,7 +110,6 @@ const ComputeDialog = ({ isOpen, setIsOpen }) => {
   const [shouldShowConfigOptions, setShouldShowConfigOptions] =
     useState(false);
   const [, { addComputeResult }] = useComputeResults();
-  const [settings] = useSettings();
 
   const [
     uploadMetricalTreeFile,
@@ -131,13 +132,13 @@ const ComputeDialog = ({ isOpen, setIsOpen }) => {
   const defaultValues = {
     name: '',
     rawText: '',
-    unstressedWords: settings.unstressedWords,
-    unstressedTags: settings.unstressedTags,
-    unstressedDeps: settings.unstressedDeps,
-    ambiguousWords: settings.ambiguousWords,
-    ambiguousTags: settings.ambiguousTags,
-    ambiguousDeps: settings.ambiguousDeps,
-    stressedWords: settings.stressedWords,
+    unstressedWords: DEFAULT_SETTINGS_CONFIG.unstressedWords,
+    unstressedTags: DEFAULT_SETTINGS_CONFIG.unstressedTags,
+    unstressedDeps: DEFAULT_SETTINGS_CONFIG.unstressedDeps,
+    ambiguousWords: DEFAULT_SETTINGS_CONFIG.ambiguousWords,
+    ambiguousTags: DEFAULT_SETTINGS_CONFIG.ambiguousTags,
+    ambiguousDeps: DEFAULT_SETTINGS_CONFIG.ambiguousDeps,
+    stressedWords: DEFAULT_SETTINGS_CONFIG.stressedWords,
   };
 
   const {
@@ -212,7 +213,14 @@ const ComputeDialog = ({ isOpen, setIsOpen }) => {
   };
 
   return (
-    <Dialog open={isOpen} maxWidth="sm" onClose={handleClose}>
+    <Dialog
+      open={isOpen}
+      maxWidth="sm"
+      onClose={(event, reason) => {
+        if (reason !== 'backdropClick') {
+          handleClose(event, reason);
+        }
+      }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         {isLoading && <LinearProgress color="primary" />}
         <DialogTitle className={classes.dialogTitle}>
@@ -237,12 +245,13 @@ const ComputeDialog = ({ isOpen, setIsOpen }) => {
             <Grid item xs={12} className="form-container">
               <section>
                 <Typography className={classes.sectionTitle}>
-                  Name (Optional)
+                  Output Name (Optional)
                 </Typography>
                 <Controller
                   render={({ field }) => (
                     <TextField
                       {...field}
+                      placeholder="Jimmy Carter Speech"
                       variant="outlined"
                       margin="dense"
                       fullWidth
@@ -416,8 +425,8 @@ const ComputeDialog = ({ isOpen, setIsOpen }) => {
                         !shouldShowConfigOptions
                       )
                     }>
-                    <Typography className={classes.linkText}>
-                      Optional Configuration
+                    <Typography>
+                      Fine-Tune the Grammar (Optional Configuration)
                     </Typography>
                   </Link>
                 </Grid>

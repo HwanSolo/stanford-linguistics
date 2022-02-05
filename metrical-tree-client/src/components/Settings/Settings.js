@@ -17,8 +17,6 @@ import {
   Checkbox,
   FormControlLabel,
 } from '@material-ui/core';
-import ComputeOptionalConfigForm from 'components/ComputeOptionalConfigForm';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import StyledButtonPrimary from 'components/shared/ButtonPrimary/ButtonPrimary';
 import { useSettings } from 'recoil/settings';
 
@@ -68,10 +66,9 @@ const Settings = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [settings, { handleSettingsChange }] = useSettings();
 
-  const { handleSubmit, control, formState, reset, setValue } =
-    useForm({
-      defaultValues: settings,
-    });
+  const { handleSubmit, control, formState, reset } = useForm({
+    defaultValues: settings,
+  });
 
   const { isDirty, isValid } = formState;
 
@@ -123,25 +120,6 @@ const Settings = () => {
           </DialogTitle>
           <DialogContent>
             <Grid container>
-              <Grid item xs={12} className={classes.warningMessage}>
-                <Grid
-                  container
-                  direction="row"
-                  spacing={1}
-                  alignItems="center">
-                  <Grid item>
-                    <ErrorOutlineIcon />
-                  </Grid>
-                  <Grid item>
-                    <Typography style={{ fontWeight: 'bold' }}>
-                      Please Note
-                    </Typography>
-                  </Grid>
-                </Grid>
-                <Typography variant="subtitle2">
-                  These settings will be applied to all computations.
-                </Typography>
-              </Grid>
               <Grid item xs={12}>
                 <section>
                   <Controller
@@ -167,10 +145,6 @@ const Settings = () => {
                   />
                 </section>
               </Grid>
-              <ComputeOptionalConfigForm
-                control={control}
-                setValue={setValue}
-              />
             </Grid>
           </DialogContent>
           <DialogActions>
