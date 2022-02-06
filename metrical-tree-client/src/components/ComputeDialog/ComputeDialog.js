@@ -175,19 +175,38 @@ const ComputeDialog = ({ isOpen, setIsOpen }) => {
       },
     })
       .then((result) => {
+        const getGrammarArrayIfNotEmpty = (grammarArray) => {
+          return grammarArray && grammarArray.length > 0
+            ? grammarArray
+            : undefined;
+        };
         return computeMetricalTreeFile({
           variables: {
             id: result.data.upload.id,
             options: {
               name: data?.name ?? undefined,
               description: '',
-              unstressed_words: data.unstressedWords,
-              unstressed_tags: data.unstressedTags,
-              unstressed_deps: data.unstressedDeps,
-              ambiguous_words: data.ambiguousWords,
-              ambiguous_tags: data.ambiguousTags,
-              ambiguous_deps: data.ambiguousDeps,
-              stressed_words: data.stressedWords,
+              unstressed_words: getGrammarArrayIfNotEmpty(
+                data.unstressedWords
+              ),
+              unstressed_tags: getGrammarArrayIfNotEmpty(
+                data.unstressedTags
+              ),
+              unstressed_deps: getGrammarArrayIfNotEmpty(
+                data.unstressedDeps
+              ),
+              ambiguous_words: getGrammarArrayIfNotEmpty(
+                data.ambiguousWords
+              ),
+              ambiguous_tags: getGrammarArrayIfNotEmpty(
+                data.ambiguousTags
+              ),
+              ambiguous_deps: getGrammarArrayIfNotEmpty(
+                data.ambiguousDeps
+              ),
+              stressed_words: getGrammarArrayIfNotEmpty(
+                data.stressedWords
+              ),
             },
           },
         });
