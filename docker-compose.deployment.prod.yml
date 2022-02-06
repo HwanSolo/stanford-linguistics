@@ -24,10 +24,7 @@ services:
     depends_on:
       - nginx-proxy
   api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-    image: hwansolo/stanford-linguistics-api:${build_version:-latest}
+    image: hwansolo/stanford-linguistics-api:latest
     restart: always
     volumes:
       - ./results:/results
@@ -41,10 +38,7 @@ services:
       LETSENCRYPT_HOST: cogeto-api.stanford.edu
       LETSENCRYPT_EMAIL: jsolis@graycoltdevelopers.com
   worker:
-    build:
-      context: celery-queue
-      dockerfile: Dockerfile
-    image: hwansolo/stanford-linguistics-worker:${build_version:-latest}
+    image: hwansolo/stanford-linguistics-worker:latest
     restart: always
     depends_on:
       - redis
@@ -53,10 +47,7 @@ services:
       - ./results:/results
       - ./public:/public
   worker-monitor:
-    build:
-      context: celery-queue
-      dockerfile: Dockerfile
-    image: hwansolo/stanford-linguistics-worker-monitor:${build_version:-latest}
+    image: hwansolo/stanford-linguistics-worker-monitor:latest
     restart: always
     entrypoint: flower
     command: -A tasks --port=5555 --broker=redis://redis:6379/0
@@ -69,10 +60,7 @@ services:
       LETSENCRYPT_HOST: cogeto-monitor.stanford.edu
       LETSENCRYPT_EMAIL: jsolis@graycoltdevelopers.com
   cogeto-client:
-    build:
-      context: ./cogeto-client
-      dockerfile: Dockerfile
-    image: hwansolo/stanford-linguistics-cogeto-client:${build_version:-latest}
+    image: hwansolo/stanford-linguistics-cogeto-client:latest
     restart: always
     environment:
       VIRTUAL_HOST: cogeto.stanford.edu
@@ -82,10 +70,7 @@ services:
     depends_on:
       - nginx-proxy
   metrical-tree-client:
-    build:
-      context: ./metrical-tree-client
-      dockerfile: Dockerfile
-    image: hwansolo/stanford-linguistics-metrical-tree-client:${build_version:-latest}
+    image: hwansolo/stanford-linguistics-metrical-tree-client:latest
     restart: always
     environment:
       VIRTUAL_HOST: metricaltree.stanford.edu

@@ -8,9 +8,6 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
   api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
     image: hwansolo/stanford-linguistics-api:local
     restart: always
     volumes:
@@ -23,9 +20,6 @@ services:
       VIRTUAL_HOST: api.local
       VIRTUAL_PORT: 5001
   worker:
-    build:
-      context: celery-queue
-      dockerfile: Dockerfile
     image: hwansolo/stanford-linguistics-worker:local
     restart: always
     depends_on:
@@ -35,9 +29,6 @@ services:
       - ./results:/results
       - ./public:/public
   worker-monitor:
-    build:
-      context: celery-queue
-      dockerfile: Dockerfile
     image: hwansolo/stanford-linguistics-worker-monitor:local
     restart: always
     entrypoint: flower
@@ -49,9 +40,6 @@ services:
       VIRTUAL_HOST: monitor.local
       VIRTUAL_PORT: 5555
   cogeto-client:
-    build:
-      context: ./cogeto-client
-      dockerfile: Dockerfile.local
     image: hwansolo/stanford-linguistics-cogeto-client:local
     restart: always
     environment:
@@ -60,9 +48,6 @@ services:
     depends_on:
       - nginx-proxy
   metrical-tree-client:
-    build:
-      context: ./metrical-tree-client
-      dockerfile: Dockerfile.local
     image: hwansolo/stanford-linguistics-metrical-tree-client:local
     restart: always
     environment:

@@ -54,3 +54,26 @@ If you would like to change the endpoints, update the code in [api/app.py](api/a
 Task changes should happen in [queue/tasks.py](celery-queue/tasks.py)
 
 ---
+
+## DockerHub
+
+To build and tag with latest:
+
+```bash
+docker compose up --build
+docker compose push
+```
+
+To build and tag with build version:
+
+```bash
+export build_version=1.0.0
+docker compose up --build
+docker compose push
+```
+
+To run with images from DockerHub:
+
+```bash
+docker compose -f docker-compose.deployment.prod.yml up -d
+```
