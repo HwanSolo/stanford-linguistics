@@ -142,6 +142,14 @@ const getGraphOptions = (resultData) => {
   // });
 
   options.push({
+    label: 'm2a (normalized and raw)',
+    value: [
+      getModelForSpecifiedKey('norm_m2a', resultData),
+      getModelForSpecifiedKey('m2a', resultData),
+    ],
+  });
+
+  options.push({
     label: 'Series (normalized)',
     value: [
       getModelForSpecifiedKey('norm_m1', resultData),
