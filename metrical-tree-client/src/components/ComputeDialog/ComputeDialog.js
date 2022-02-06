@@ -157,8 +157,6 @@ const ComputeDialog = ({ isOpen, setIsOpen }) => {
   const currentRawText = watch('rawText');
 
   const onSubmit = (data) => {
-    console.log(data);
-
     const getFileFromRawText = () => {
       const blob = new Blob([data.rawText], { type: 'text/plain' });
       return new File([blob], 'input.txt', {

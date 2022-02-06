@@ -4,12 +4,25 @@ import { Chart } from 'react-charts';
 import ResizableBox from 'components/ResizableBox';
 
 export const ResultsGraph = forwardRef(({ model }, ref) => {
-  const data = model?.value ? model.value : [];
+  const data = React.useMemo(() => {
+    return model?.value ?? [];
+  }, [model?.value]);
+
+  console.log('DATA: ', data);
+
   const primaryAxis = React.useMemo(
     () => ({
       getValue: (datum) => datum.primary,
+      formatters: {
+        scale: (value) => {
+          const datum = data[0].data.find(
+            (datum) => datum.widx === value
+          );
+          return datum?.label ?? value;
+        },
+      },
     }),
-    []
+    [data]
   );
 
   const secondaryAxis = React.useMemo(

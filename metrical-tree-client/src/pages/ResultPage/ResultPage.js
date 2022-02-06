@@ -76,34 +76,34 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const selectableModels = [
-  {
-    label: 'm1 (raw)',
-    apiKey: 'm1',
-  },
+  // {
+  //   label: 'm1 (raw)',
+  //   apiKey: 'm1',
+  // },
   {
     label: 'm1 (normalized)',
     apiKey: 'norm_m1',
   },
-  {
-    label: 'm2a (raw)',
-    apiKey: 'm2a',
-  },
+  // {
+  //   label: 'm2a (raw)',
+  //   apiKey: 'm2a',
+  // },
   {
     label: 'm2a (normalized)',
     apiKey: 'norm_m2a',
   },
-  {
-    label: 'm2b (raw)',
-    apiKey: 'm2b',
-  },
+  // {
+  //   label: 'm2b (raw)',
+  //   apiKey: 'm2b',
+  // },
   {
     label: 'm2b (normalized)',
     apiKey: 'norm_m2b',
   },
-  {
-    label: 'mean (raw)',
-    apiKey: 'mean',
-  },
+  // {
+  //   label: 'mean (raw)',
+  //   apiKey: 'mean',
+  // },
   {
     label: 'mean (normalized)',
     apiKey: 'norm_mean',
@@ -115,8 +115,10 @@ const getModelForSpecifiedKey = (apiKey, data) => {
     data:
       data
         ?.map((row) => ({
-          primary: row.word,
+          primary: row.widx,
           secondary: Number(row[apiKey]),
+          widx: row.widx,
+          label: row.word,
         }))
         .filter((row) => !isNaN(row.secondary)) ?? [],
     label: apiKey,
@@ -129,15 +131,15 @@ const getGraphOptions = (resultData) => {
     value: [getModelForSpecifiedKey(model.apiKey, resultData)],
   }));
 
-  options.push({
-    label: 'Series (raw)',
-    value: [
-      getModelForSpecifiedKey('m1', resultData),
-      getModelForSpecifiedKey('m2a', resultData),
-      getModelForSpecifiedKey('m2b', resultData),
-      getModelForSpecifiedKey('mean', resultData),
-    ],
-  });
+  // options.push({
+  //   label: 'Series (raw)',
+  //   value: [
+  //     getModelForSpecifiedKey('m1', resultData),
+  //     getModelForSpecifiedKey('m2a', resultData),
+  //     getModelForSpecifiedKey('m2b', resultData),
+  //     getModelForSpecifiedKey('mean', resultData),
+  //   ],
+  // });
 
   options.push({
     label: 'Series (normalized)',
@@ -181,14 +183,14 @@ const ResultPage = () => {
     ...(data?.result ? data.result : {}),
   };
 
-  console.log(mergedResult);
+  console.log('mergedResult:', mergedResult);
 
   const graphOptions = getGraphOptions(mergedResult.data);
 
   useEffect(() => {
     if (!selectedModel && graphOptions.length > 0) {
       const defaultModel = graphOptions.find(
-        (option) => option.value[0].label === 'm2a'
+        (option) => option.value[0].label === 'norm_m2a'
       );
       setSelectedModel(defaultModel);
     }
