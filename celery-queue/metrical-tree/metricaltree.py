@@ -149,19 +149,28 @@ def pause_splitter(s):
 
 class MetricalTree(DependencyTree):
     """"""
+    # Disable defaults as they are now being managed by the application wrapper
+    # _unstressedWords = ('it',) if not unstressed_words else tuple(
+    #     unstressed_words)
+    # _unstressedTags = ('CC', 'PRP$', 'TO', 'UH',
+    #                    'DT') if not unstressed_tags else tuple(unstressed_tags)
+    # _unstressedDeps = (
+    #     'det', 'expl', 'cc', 'mark') if not unstressed_deps else tuple(unstressed_deps)
+    # _ambiguousWords = ('this', 'that', 'these',
+    #                    'those') if not ambiguous_words else tuple(ambiguous_words)
+    # _ambiguousTags = ('MD', 'IN', 'PRP', 'WP$', 'PDT', 'WDT', 'WP',
+    #                   'WRB') if not ambiguous_tags else tuple(ambiguous_tags)
+    # _ambiguousDeps = ('cop', 'neg', 'aux',
+    #                   'auxpass') if not ambiguous_deps else tuple(ambiguous_deps)
+    # _stressedWords = tuple() if not stressed_words else tuple(stressed_words)
 
-    _unstressedWords = ('it',) if not unstressed_words else tuple(
+    _unstressedWords = tuple() if not unstressed_words else tuple(
         unstressed_words)
-    _unstressedTags = ('CC', 'PRP$', 'TO', 'UH',
-                       'DT') if not unstressed_tags else tuple(unstressed_tags)
-    _unstressedDeps = (
-        'det', 'expl', 'cc', 'mark') if not unstressed_deps else tuple(unstressed_deps)
-    _ambiguousWords = ('this', 'that', 'these',
-                       'those') if not ambiguous_words else tuple(ambiguous_words)
-    _ambiguousTags = ('MD', 'IN', 'PRP', 'WP$', 'PDT', 'WDT', 'WP',
-                      'WRB') if not ambiguous_tags else tuple(ambiguous_tags)
-    _ambiguousDeps = ('cop', 'neg', 'aux',
-                      'auxpass') if not ambiguous_deps else tuple(ambiguous_deps)
+    _unstressedTags = tuple() if not unstressed_tags else tuple(unstressed_tags)
+    _unstressedDeps = tuple() if not unstressed_deps else tuple(unstressed_deps)
+    _ambiguousWords = tuple() if not ambiguous_words else tuple(ambiguous_words)
+    _ambiguousTags = tuple() if not ambiguous_tags else tuple(ambiguous_tags)
+    _ambiguousDeps = tuple() if not ambiguous_deps else tuple(ambiguous_deps)
     _stressedWords = tuple() if not stressed_words else tuple(stressed_words)
 
     # =====================================================================
