@@ -67,7 +67,7 @@ docker compose push
 To build and tag with build version:
 
 ```bash
-export build_version=1.0.0
+export build_version=1.0.1
 docker compose up --build
 docker compose push
 ```
