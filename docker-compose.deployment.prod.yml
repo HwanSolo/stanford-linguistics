@@ -25,7 +25,6 @@ services:
       - nginx-proxy
   api:
     image: hwansolo/stanford-linguistics-api:latest
-    pull_policy: always
     restart: always
     volumes:
       - ./results:/results
@@ -40,7 +39,6 @@ services:
       LETSENCRYPT_EMAIL: jsolis@graycoltdevelopers.com
   worker:
     image: hwansolo/stanford-linguistics-worker:latest
-    pull_policy: always
     restart: always
     depends_on:
       - redis
@@ -50,7 +48,6 @@ services:
       - ./public:/public
   worker-monitor:
     image: hwansolo/stanford-linguistics-worker-monitor:latest
-    pull_policy: always
     restart: always
     entrypoint: flower
     command: -A tasks --port=5555 --broker=redis://redis:6379/0
@@ -64,7 +61,6 @@ services:
       LETSENCRYPT_EMAIL: jsolis@graycoltdevelopers.com
   cogeto-client:
     image: hwansolo/stanford-linguistics-cogeto-client:latest
-    pull_policy: always
     restart: always
     environment:
       VIRTUAL_HOST: cogeto.stanford.edu
@@ -75,7 +71,6 @@ services:
       - nginx-proxy
   metrical-tree-client:
     image: hwansolo/stanford-linguistics-metrical-tree-client:latest
-    pull_policy: always
     restart: always
     environment:
       VIRTUAL_HOST: metricaltree.stanford.edu
