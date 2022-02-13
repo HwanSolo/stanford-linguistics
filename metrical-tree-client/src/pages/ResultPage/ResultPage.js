@@ -25,6 +25,7 @@ import StyledButtonPrimary from 'components/shared/ButtonPrimary/ButtonPrimary';
 import MUIDataTable from 'mui-datatables';
 import ResultsGraph from 'components/ResultsGraph';
 import ReactToPrint from 'react-to-print';
+import { IS_DEV_ENV } from 'constants/index';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -73,37 +74,29 @@ const useStyles = makeStyles((theme) => ({
   },
   parameterName: { display: 'inline', fontSize: '0.75rem' },
   parameterWordChip: { marginRight: theme.spacing(0.5) },
+  centered: { textAlign: 'center' },
+  speGridItem: {
+    marginBottom: theme.spacing(1),
+  },
+  speWord: {
+    fontSize: '0.75rem',
+    textAlign: 'center',
+  },
 }));
 
 const selectableModels = [
-  // {
-  //   label: 'm1 (raw)',
-  //   apiKey: 'm1',
-  // },
   {
     label: 'm1 (normalized)',
     apiKey: 'norm_m1',
   },
-  // {
-  //   label: 'm2a (raw)',
-  //   apiKey: 'm2a',
-  // },
   {
     label: 'm2a (normalized)',
     apiKey: 'norm_m2a',
   },
-  // {
-  //   label: 'm2b (raw)',
-  //   apiKey: 'm2b',
-  // },
   {
     label: 'm2b (normalized)',
     apiKey: 'norm_m2b',
   },
-  // {
-  //   label: 'mean (raw)',
-  //   apiKey: 'mean',
-  // },
   {
     label: 'mean (normalized)',
     apiKey: 'norm_mean',
@@ -130,24 +123,6 @@ const getGraphOptions = (resultData) => {
     label: model.label,
     value: [getModelForSpecifiedKey(model.apiKey, resultData)],
   }));
-
-  // options.push({
-  //   label: 'Series (raw)',
-  //   value: [
-  //     getModelForSpecifiedKey('m1', resultData),
-  //     getModelForSpecifiedKey('m2a', resultData),
-  //     getModelForSpecifiedKey('m2b', resultData),
-  //     getModelForSpecifiedKey('mean', resultData),
-  //   ],
-  // });
-
-  options.push({
-    label: 'm2a (normalized and raw)',
-    value: [
-      getModelForSpecifiedKey('norm_m2a', resultData),
-      getModelForSpecifiedKey('m2a', resultData),
-    ],
-  });
 
   options.push({
     label: 'Series (normalized)',
@@ -190,8 +165,6 @@ const ResultPage = () => {
     ...cachedResult,
     ...(data?.result ? data.result : {}),
   };
-
-  console.log('mergedResult:', mergedResult);
 
   const graphOptions = getGraphOptions(mergedResult.data);
 
@@ -315,6 +288,10 @@ const ResultPage = () => {
     rowsPerPageOptions: [],
   };
 
+  const testArray = [];
+
+  console.log('SELECTED MODEL: ', selectedModel);
+
   return (
     <>
       <IdentityBar />
@@ -349,7 +326,11 @@ const ResultPage = () => {
                   <Link
                     className={classes.link}
                     underline="always"
-                    href={mergedResult.link.replace('https', 'http')} //TODO: Remove this for prod
+                    href={
+                      IS_DEV_ENV
+                        ? mergedResult.link.replace('https', 'http')
+                        : mergedResult.link
+                    }
                     download>
                     <Typography className={classes.linkText}>
                       Download Raw Results
@@ -369,18 +350,9 @@ const ResultPage = () => {
           <Grid container>
             <Grid item xs={12} className={classes.section}>
               <Card className={classes.card}>
-                <Grid
-                  container
-                  direction="row"
-                  spacing={1}
-                  alignItems="center"
-                  justifyContent="space-between">
+                <Grid container justifyContent="flex-end">
                   <Grid item>
-                    <Typography className={classes.cardTitle}>
-                      Graphs
-                    </Typography>
-                  </Grid>
-                  <Grid item>
+                    <Typography variant="subtitle2">Model</Typography>
                     <Select
                       value={selectedModel?.label ?? ''}
                       variant="outlined"
@@ -404,7 +376,44 @@ const ResultPage = () => {
                     </Select>
                   </Grid>
                 </Grid>
+                <Grid container style={{ marginBottom: 24 }}>
+                  <Grid item xs={12}>
+                    <Typography className={classes.cardTitle}>
+                      SPE
+                    </Typography>
+                    <Grid container direction="row">
+                      {testArray.map(({ m1, word }) => {
+                        return (
+                          <Grid
+                            item
+                            xs={1}
+                            className={classes.speGridItem}>
+                            <Grid container alignContent="center">
+                              <Grid item xs={12}>
+                                <Typography
+                                  className={classes.centered}>
+                                  {m1}
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Typography
+                                  className={classes.speWord}>
+                                  {word}
+                                </Typography>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        );
+                      })}
+                    </Grid>
+                  </Grid>
+                </Grid>
                 <Grid container justifyContent="center">
+                  <Grid item xs={12}>
+                    <Typography className={classes.cardTitle}>
+                      Grid
+                    </Typography>
+                  </Grid>
                   <Grid item>
                     <ResultsGraph
                       ref={graphResultToPrintRef}

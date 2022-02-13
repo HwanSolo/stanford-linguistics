@@ -26,6 +26,7 @@ import StyledButtonPrimary from 'components/shared/ButtonPrimary/ButtonPrimary';
 import { useMediaQuery } from 'react-responsive';
 import { useSettings } from 'recoil/settings';
 import noFilesImage from 'assets/images/noFiles.svg';
+import { IS_DEV_ENV } from 'constants/index';
 
 const useStyles = makeStyles((theme) => ({
   mainWrapper: { height: '100vh' },
@@ -100,7 +101,7 @@ const ComputePage = () => {
         if (shouldUpdate(result)) {
           getComputeResult({ id: result.id }).then(
             (updatedResult) => {
-              updateComputeResult(updatedResult.data.result);
+              updateComputeResult(updatedResult?.data?.result);
             }
           );
         }
@@ -217,7 +218,9 @@ const ComputePage = () => {
         customBodyRender: (id, rowData) => {
           const status = rowData.rowData[2];
           const downloadUrl = rowData.rowData[4]
-            ? rowData.rowData[4].replace('https', 'http') //TODO: Remove this for prod
+            ? IS_DEV_ENV
+              ? rowData.rowData[4].replace('https', 'http')
+              : rowData.rowData[4]
             : null;
           return (
             <Grid container alignItems="center">

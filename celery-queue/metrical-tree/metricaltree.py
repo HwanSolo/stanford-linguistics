@@ -102,13 +102,6 @@ ambiguous_tags = args.ambiguous_tags
 ambiguous_deps = args.ambiguous_deps
 stressed_words = args.stressed_words
 
-print('1', unstressed_words)
-print('2', unstressed_tags)
-print('3', unstressed_deps)
-print('4', ambiguous_words)
-print('5', ambiguous_tags)
-print('6', ambiguous_deps)
-print('7', stressed_words)
 
 # ***********************************************************************
 # Multiprocessing worker
