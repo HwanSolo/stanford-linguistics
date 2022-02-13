@@ -10,6 +10,7 @@ import {
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { DEFAULT_SETTINGS_CONFIG } from 'constants/settings';
 import { Controller } from 'react-hook-form';
+import OptionalConfigWarning from 'components/OptionalConfigWarning';
 
 const useStyles = makeStyles((theme) => ({
   section: { marginTop: theme.spacing(2) },
@@ -55,6 +56,7 @@ const ComputeOptionalConfigForm = ({ control, setValue }) => {
             Whatever you decide will have a huge impact on the
             calculation of normal stress in virtually every sentence.
           </Typography>
+          <OptionalConfigWarning />
         </Grid>
         <Grid item xs={12} className={classes.section}>
           <Grid container direction="row" spacing={2}>

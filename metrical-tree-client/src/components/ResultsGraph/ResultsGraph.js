@@ -8,15 +8,13 @@ export const ResultsGraph = forwardRef(({ model }, ref) => {
     return model?.value ?? [];
   }, [model?.value]);
 
-  console.log('DATA: ', data);
-
   const primaryAxis = React.useMemo(
     () => ({
       getValue: (datum) => datum.primary,
       formatters: {
         scale: (value) => {
           const datum = data[0].data.find(
-            (datum) => datum.widx === value
+            (datum) => datum.primary === value
           );
           return datum?.label ?? value;
         },

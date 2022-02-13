@@ -66,8 +66,10 @@ const useStyles = makeStyles((theme) => ({
   linkText: { fontSize: '0.75rem' },
   card: { padding: theme.spacing(2), marginTop: theme.spacing(2) },
   cardTitle: { fontWeight: 'bold' },
+  selectedModel: {},
   graphCard: { margin: theme.spacing(2, 0, 1, 0) },
   section: { marginBottom: theme.spacing(2) },
+  sectionTitle: { fontSize: '1.5rem', fontWeight: 'bold' },
   parameterGroup: {
     marginRight: theme.spacing(2),
     marginBottom: theme.spacing(1),
@@ -86,29 +88,57 @@ const useStyles = makeStyles((theme) => ({
 
 const selectableModels = [
   {
-    label: 'm1 (normalized)',
-    apiKey: 'norm_m1',
+    label: 'm1',
+    spe: {
+      label: 'm1 (raw) ',
+      apiKey: 'm1',
+    },
+    grid: {
+      label: 'm1 (normalized)',
+      apiKey: 'norm_m1',
+    },
   },
   {
-    label: 'm2a (normalized)',
-    apiKey: 'norm_m2a',
+    label: 'm2a',
+    spe: {
+      label: 'm2a (raw)',
+      apiKey: 'm2a',
+    },
+    grid: {
+      label: 'm2a (normalized)',
+      apiKey: 'norm_m2a',
+    },
   },
   {
-    label: 'm2b (normalized)',
-    apiKey: 'norm_m2b',
+    label: 'm2b',
+    spe: {
+      label: 'm2b (raw)',
+      apiKey: 'm2b',
+    },
+    grid: {
+      label: 'm2b (normalized)',
+      apiKey: 'norm_m2b',
+    },
   },
   {
-    label: 'mean (normalized)',
-    apiKey: 'norm_mean',
+    label: 'mean',
+    spe: {
+      label: 'mean (raw)',
+      apiKey: 'mean',
+    },
+    grid: {
+      label: 'mean (normalized)',
+      apiKey: 'norm_mean',
+    },
   },
 ];
 
-const getModelForSpecifiedKey = (apiKey, data) => {
+const getGridModelForSpecifiedKey = (apiKey, data) => {
   return {
     data:
       data
-        ?.map((row) => ({
-          primary: row.widx,
+        ?.map((row, index) => ({
+          primary: row.word + index,
           secondary: Number(row[apiKey]),
           widx: row.widx,
           label: row.word,
@@ -118,20 +148,45 @@ const getModelForSpecifiedKey = (apiKey, data) => {
   };
 };
 
+const getSPEModelForSpecifiedKey = (apiKey, data) => {
+  return (
+    data
+      ?.map((row) => ({
+        word: row.word,
+        value: Number(row[apiKey]),
+        widx: row.widx,
+      }))
+      .filter((row) => !isNaN(row.value)) ?? []
+  );
+};
+
 const getGraphOptions = (resultData) => {
   const options = selectableModels.map((model) => ({
     label: model.label,
-    value: [getModelForSpecifiedKey(model.apiKey, resultData)],
+    spe: {
+      label: model.spe.label,
+      value: getSPEModelForSpecifiedKey(model.spe.apiKey, resultData),
+    },
+    grid: {
+      label: model.grid.label,
+      value: [
+        getGridModelForSpecifiedKey(model.grid.apiKey, resultData),
+      ],
+    },
   }));
 
   options.push({
     label: 'Series (normalized)',
-    value: [
-      getModelForSpecifiedKey('norm_m1', resultData),
-      getModelForSpecifiedKey('norm_m2a', resultData),
-      getModelForSpecifiedKey('norm_m2b', resultData),
-      getModelForSpecifiedKey('norm_mean', resultData),
-    ],
+    spe: null,
+    grid: {
+      label: 'Series (normalized)',
+      value: [
+        getGridModelForSpecifiedKey('norm_m1', resultData),
+        getGridModelForSpecifiedKey('norm_m2a', resultData),
+        getGridModelForSpecifiedKey('norm_m2b', resultData),
+        getGridModelForSpecifiedKey('norm_mean', resultData),
+      ],
+    },
   });
 
   return options;
@@ -171,7 +226,7 @@ const ResultPage = () => {
   useEffect(() => {
     if (!selectedModel && graphOptions.length > 0) {
       const defaultModel = graphOptions.find(
-        (option) => option.value[0].label === 'norm_m2a'
+        (option) => option.label === 'm2a'
       );
       setSelectedModel(defaultModel);
     }
@@ -288,10 +343,6 @@ const ResultPage = () => {
     rowsPerPageOptions: [],
   };
 
-  const testArray = [];
-
-  console.log('SELECTED MODEL: ', selectedModel);
-
   return (
     <>
       <IdentityBar />
@@ -350,9 +401,16 @@ const ResultPage = () => {
           <Grid container>
             <Grid item xs={12} className={classes.section}>
               <Card className={classes.card}>
-                <Grid container justifyContent="flex-end">
+                <Grid container justifyContent="space-between">
                   <Grid item>
-                    <Typography variant="subtitle2">Model</Typography>
+                    <Typography className={classes.sectionTitle}>
+                      {selectedModel?.label ?? ''}
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="caption">
+                      Select Model
+                    </Typography>
                     <Select
                       value={selectedModel?.label ?? ''}
                       variant="outlined"
@@ -376,38 +434,51 @@ const ResultPage = () => {
                     </Select>
                   </Grid>
                 </Grid>
-                <Grid container style={{ marginBottom: 24 }}>
-                  <Grid item xs={12}>
-                    <Typography className={classes.cardTitle}>
-                      SPE
-                    </Typography>
-                    <Grid container direction="row">
-                      {testArray.map(({ m1, word }) => {
-                        return (
-                          <Grid
-                            item
-                            xs={1}
-                            className={classes.speGridItem}>
-                            <Grid container alignContent="center">
-                              <Grid item xs={12}>
-                                <Typography
-                                  className={classes.centered}>
-                                  {m1}
-                                </Typography>
+                {selectedModel?.spe && (
+                  <Grid container style={{ marginBottom: 24 }}>
+                    <Grid item xs={12}>
+                      <Typography className={classes.cardTitle}>
+                        SPE
+                      </Typography>
+                      <Typography className={classes.selectedModel}>
+                        {selectedModel?.spe?.label}
+                      </Typography>
+                      <Grid container direction="row">
+                        {selectedModel?.spe?.value.map(
+                          ({ value, word }, index) => {
+                            return (
+                              <Grid
+                                item
+                                key={index}
+                                xs={4}
+                                sm={2}
+                                md={1}
+                                className={classes.speGridItem}>
+                                <Grid
+                                  container
+                                  alignContent="center"
+                                  direction="row">
+                                  <Grid item xs={12}>
+                                    <Typography
+                                      className={classes.centered}>
+                                      {value}
+                                    </Typography>
+                                  </Grid>
+                                  <Grid item xs={12}>
+                                    <Typography
+                                      className={classes.speWord}>
+                                      {word}
+                                    </Typography>
+                                  </Grid>
+                                </Grid>
                               </Grid>
-                              <Grid item xs={12}>
-                                <Typography
-                                  className={classes.speWord}>
-                                  {word}
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        );
-                      })}
+                            );
+                          }
+                        )}
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
+                )}
                 <Grid container justifyContent="center">
                   <Grid item xs={12}>
                     <Typography className={classes.cardTitle}>
@@ -417,7 +488,7 @@ const ResultPage = () => {
                   <Grid item>
                     <ResultsGraph
                       ref={graphResultToPrintRef}
-                      model={selectedModel}
+                      model={selectedModel?.grid}
                     />
                     <Grid container justifyContent="flex-end">
                       <ReactToPrint
