@@ -26,6 +26,7 @@ import MUIDataTable from 'mui-datatables';
 import ResultsGraph from 'components/ResultsGraph';
 import ReactToPrint from 'react-to-print';
 import { IS_DEV_ENV } from 'constants/index';
+import LengthNotice from 'components/LengthNotice';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -88,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
 
 const selectableModels = [
   {
-    label: 'm1',
+    label: 'Max Stress',
     spe: {
       label: 'm1 (raw) ',
       apiKey: 'm1',
@@ -99,7 +100,7 @@ const selectableModels = [
     },
   },
   {
-    label: 'm2a',
+    label: '(Default)',
     spe: {
       label: 'm2a (raw)',
       apiKey: 'm2a',
@@ -110,7 +111,7 @@ const selectableModels = [
     },
   },
   {
-    label: 'm2b',
+    label: 'Min Stress',
     spe: {
       label: 'm2b (raw)',
       apiKey: 'm2b',
@@ -122,10 +123,6 @@ const selectableModels = [
   },
   {
     label: 'mean',
-    spe: {
-      label: 'mean (raw)',
-      apiKey: 'mean',
-    },
     grid: {
       label: 'mean (normalized)',
       apiKey: 'norm_mean',
@@ -163,10 +160,15 @@ const getSPEModelForSpecifiedKey = (apiKey, data) => {
 const getGraphOptions = (resultData) => {
   const options = selectableModels.map((model) => ({
     label: model.label,
-    spe: {
-      label: model.spe.label,
-      value: getSPEModelForSpecifiedKey(model.spe.apiKey, resultData),
-    },
+    spe: model.spe
+      ? {
+          label: model.spe.label,
+          value: getSPEModelForSpecifiedKey(
+            model.spe.apiKey,
+            resultData
+          ),
+        }
+      : null,
     grid: {
       label: model.grid.label,
       value: [
@@ -221,12 +223,14 @@ const ResultPage = () => {
     ...(data?.result ? data.result : {}),
   };
 
+  const showNotice = mergedResult?.data?.length >= 75;
+
   const graphOptions = getGraphOptions(mergedResult.data);
 
   useEffect(() => {
     if (!selectedModel && graphOptions.length > 0) {
       const defaultModel = graphOptions.find(
-        (option) => option.label === 'm2a'
+        (option) => option.label === '(Default)'
       );
       setSelectedModel(defaultModel);
     }
@@ -434,6 +438,13 @@ const ResultPage = () => {
                     </Select>
                   </Grid>
                 </Grid>
+                {showNotice && (
+                  <Grid container>
+                    <Grid item>
+                      <LengthNotice />
+                    </Grid>
+                  </Grid>
+                )}
                 {selectedModel?.spe && (
                   <Grid container style={{ marginBottom: 24 }}>
                     <Grid item xs={12}>
